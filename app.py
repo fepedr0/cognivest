@@ -1,18 +1,19 @@
-from flask import Flask, request, jsonify, render_template, redirect, session
+from flask import Flask, request, jsonify, render_template, redirect, session, send_file
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
-from flask import Flask, request, jsonify, render_template, redirect, session, send_file
-import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment
+import openpyxl
 import io
+import os
 
 app = Flask(__name__, static_folder="assets")
-app.secret_key = 'cognivest_secret_123'
+app.secret_key = os.environ.get('SECRET_KEY', 'cognivest_secret_123')
 
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'felipe2008hg'
-app.config['MYSQL_DB'] = 'cognivest'
+app.config['MYSQL_HOST'] = os.environ.get('MYSQL_HOST', 'localhost')
+app.config['MYSQL_USER'] = os.environ.get('MYSQL_USER', 'root')
+app.config['MYSQL_PASSWORD'] = os.environ.get('MYSQL_PASSWORD', 'felipe2008hg')
+app.config['MYSQL_DB'] = os.environ.get('MYSQL_DB', 'cognivest')
+app.config['MYSQL_PORT'] = int(os.environ.get('MYSQL_PORT', 3306))
 
 mysql = MySQL(app)
 bcrypt = Bcrypt(app)
@@ -108,7 +109,7 @@ def salvar_calculo():
     except Exception as e:
         print('ERRO AO SALVAR:', e)
         return jsonify({ 'sucesso': False })
-    
+
 @app.route('/historico')
 def historico():
     if 'usuario_id' not in session:
@@ -120,11 +121,6 @@ def historico():
     cur.close()
 
     return render_template('historico.html', calculos=calculos)
-
-from flask import send_file
-import openpyxl
-from openpyxl.styles import Font, PatternFill, Alignment
-import io
 
 @app.route('/gerar_planilha', methods=['POST'])
 def gerar_planilha():
@@ -142,12 +138,10 @@ def gerar_planilha():
     rate = taxa_juros / 100
     parcela = financed * (rate * (1 + rate) ** parcelas) / ((1 + rate) ** parcelas - 1)
 
-    # Cria a planilha
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = "Financiamento"
 
-    # Cabeçalho
     ws.append(["Mês", "Parcela (R$)", "Juros (R$)", "Amortização (R$)", "Saldo Devedor (R$)"])
 
     header_fill = PatternFill("solid", fgColor="6d28d9")
@@ -157,7 +151,6 @@ def gerar_planilha():
         cell.font = header_font
         cell.alignment = Alignment(horizontal="center")
 
-    # Linhas mês a mês
     saldo = financed
     for mes in range(1, parcelas + 1):
         juros_mes = saldo * rate
@@ -171,12 +164,10 @@ def gerar_planilha():
             round(max(saldo, 0), 2)
         ])
 
-    # Ajusta largura das colunas
     for col in ws.columns:
         max_len = max(len(str(cell.value)) for cell in col)
         ws.column_dimensions[col[0].column_letter].width = max_len + 4
 
-    # Salva em memória e manda pro navegador
     output = io.BytesIO()
     wb.save(output)
     output.seek(0)
