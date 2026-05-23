@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <title>CogniVest - Cadastro</title>
+</head>
+<body>
+    <main id="container">
+        <section id="calculator">
+            <div id="form">
+                <h1 id="title">CogniVest</h1>
+                <p>Crie sua conta</p>
+
+                <div class="input-box">
+                    <label>Nome:</label>
+                    <div class="input-field">
+                        <input type="text" id="nome" placeholder="Seu nome">
+                    </div>
+                </div>
+
+                <div class="input-box">
+                    <label>Email:</label>
+                    <div class="input-field">
+                        <input type="email" id="email" placeholder="seu@email.com">
+                    </div>
+                </div>
+
+                <div class="input-box">
+                    <label>Senha:</label>
+                    <div class="input-field">
+                        <input type="password" id="senha" placeholder="••••••••">
+                    </div>
+                </div>
+
+                <button id="calculate" onclick="fazerCadastro()">Cadastrar</button>
+                <p style="text-align:center; margin-top: 1rem;">
+                    Já tem conta? <a href="/login" style="color:#ab7aff;">Entrar</a>
+                </p>
+            </div>
+        </section>
+    </main>
+    <script>
+        function fazerCadastro() {
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+
+            fetch('/cadastro', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nome, email, senha })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.sucesso) {
+                    window.location.href = '/login';
+                } else {
+                    alert(data.erro);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

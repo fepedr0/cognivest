@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>CogniVest</title>
+</head>
+<body>
+    <main id="container">
+        <section id="img">
+            <img src="assets/images/ilustration.svg">
+        </section>
+        <section id="calculator">
+            <form id="form">
+                <h1 id="title">
+                    CogniVest
+                </h1>
+                <p>Sua calculadora de investimentos</p>
+                <div class="input-box">
+                    <label for="type">
+                        Tipo de Investimento:
+                    </label>
+                    <div class="input-field">
+                        <i class="fa-solid fa-house"></i>
+                        <select id="type">
+                            <option value="" disabled selected>Selecione</option>
+                            <option value="carro">Carro</option>
+                            <option value="moto">Moto</option>
+                            <option value="casa">Casa</option>
+                            <option value="apartamento">Apartamento</option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="input-box">
+                    <label for="value">
+                        Valor do bem:
+                    </label>
+                    <div class="input-field">
+                        <i class="fa-solid fa-money-bill"></i>
+                        <span>
+                            R$
+                        </span>
+                        <input type="number" id="value" required>
+                    </div>
+                </div>
+
+
+                 <div class="input-box">
+                    <label for="interest">
+                        Taxa de Juros:
+                    </label>
+                    <div class="input-field">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <input type="number" id="interest" step="0.01" required>
+                        <span>
+                            %
+                        </span>
+                    </div>
+                </div>
+
+                <div class="input-box">
+                    <label for="installments">
+                        Quantidade de Parcelas:
+                    </label>
+                    <div class="input-field">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <input type="number" id="installments" required>
+                        <span>
+                            meses
+                        </span>
+                    </div>
+                </div>
+
+
+                <div class="input-box">
+                    <label for="down_payment">
+                        Entrada (opcional):
+                    </label>
+                    <div class="input-field">
+                        <i class="fa-solid fa-wallet"></i>
+                        <span>
+                            R$
+                        </span>
+                        <input type="number" id="down_payment">
+                    </div>
+                </div>
+
+                <button type="submit" id="calculate">
+                    Calcular
+                </button>
+                <button type="button" id="btnLimpar" onclick="limparCalculadora()">
+                🗑️ Limpar
+                </button>
+
+                <div style="display:flex; justify-content:space-between; margin-top:0.5rem;">
+                    <a href="/historico" style="color:#ab7aff;">📋 Ver histórico</a>
+                    <a href="/logout" style="color:#94a3b8;">Sair</a>
+                </div>
+            </form>
+
+            <div id="infos">
+                <div id="result">
+                    <div id="financing">
+                        <span id="final"></span>
+                    </div>
+                </div>
+            </div>
+            <button type="button" id="btnPlanilha" onclick="baixarPlanilha()" style="display:none; background-color:#6d28d9;">
+                📊 Baixar Planilha
+                </button>
+        </section>
+    </main>
+<script src="assets/js/script.js"></script>
+</body>
+</html>

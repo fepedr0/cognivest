@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>CogniVest - Histórico</title>
+</head>
+<body>
+    <main id="container">
+        <section id="calculator">
+            <div id="form">
+                <h1 id="title">Histórico</h1>
+                <p>Seus cálculos anteriores</p>
+                <button type="button" onclick="limparHistorico()" style="background-color:#ef4444; color:white; border:none; padding:0.5rem 1rem; border-radius:3px; cursor:pointer; margin-top:1rem;">
+                🗑️ Limpar histórico
+                </button>
+                <div style="margin-top: 1.5rem;">
+                    {% if calculos %}
+                        {% for c in calculos %}
+                        <div style="background:#3f3f46; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                            <p style="color:#ab7aff; font-weight:600; text-transform:capitalize;">{{ c[2] }}</p>
+                            <p>Valor do bem: R$ {{ "%.2f"|format(c[3]) }}</p>
+                            <p>Taxa de juros: {{ c[4] }}%</p>
+                            <p>Parcelas: {{ c[5] }}x de R$ {{ "%.2f"|format(c[7]) }}</p>
+                            <p>Valor final: R$ {{ "%.2f"|format(c[8]) }}</p>
+                            <p>Total de juros: R$ {{ "%.2f"|format(c[9]) }}</p>
+                            <p>Aumento: {{ c[10] }}%</p>
+                            <p>Avaliação: {{ c[11] }}</p>
+                            <p style="color:#94a3b8; font-size:0.85rem;">{{ c[12] }}</p>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p style="color:#94a3b8;">Nenhum cálculo encontrado.</p>
+                    {% endif %}
+                </div>
+
+                <a href="/calculadora" style="color:#ab7aff; display:block; margin-top:1rem;">← Voltar para a calculadora</a>
+                <a href="/logout" style="color:#94a3b8; display:block; margin-top:0.5rem;">Sair</a>
+            </div>
+        </section>
+    </main>
+<script>
+        function limparHistorico() {
+            if(confirm('Tem certeza que deseja apagar todo o histórico?')) {
+                fetch('/limpar_historico', { method: 'POST' })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.sucesso) {
+                        window.location.reload();
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
+</body>
+</html>

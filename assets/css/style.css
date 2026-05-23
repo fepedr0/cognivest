@@ -1,0 +1,193 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500&display=swap');
+
+*{
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 100vh;
+    padding: 2rem;
+    background-color: #1a1a1d;
+}
+
+#container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3.5rem;
+    flex-wrap: wrap;
+}
+
+#img img {
+    width: 32rem;
+}
+
+#calculator {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem;
+    width: 500px;
+    color: #f8fafc;
+    background-color: #262626;
+    border-radius: 10px;
+}
+
+#form {
+    display:flex;
+    flex-direction: column;
+    gap: 2rem
+}
+
+#title {
+    font-size: 2.25rem;
+    color: #b590fa;
+    position: relative;
+}
+
+#title::after {
+    position: absolute;
+    content: "";
+    background-color: #cebbf0;
+    width: 8rem;
+    height: 3px;
+    bottom: 0;
+    left: 0;
+    border-radius: 3px;
+}
+
+.input-box label{
+    font-size: 1rem;
+    color: #cbd5e1;
+    font-weight: 500;
+}
+
+.input-field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #3f3f46;
+    padding: 0.3rem 0.8rem;
+    border-radius: 3px;
+    margin-top: 3px;
+}
+
+.input-field input,
+.input-field select {
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: #f8fafc;
+    outline: none;
+    font-size: 1rem;
+}
+
+.input-field input::-webkit-outer-spin-button,
+.input-field input::-webkit-inner-spin-button {
+    appearance: none;
+}
+
+.input-field input:focus {
+    outline: none;
+}
+
+#calculate {
+    border: none;
+    font-size: 1.25rem;
+    font-weight: bold;
+    background-color: #ab7aff;
+    color: white;
+    padding: 0.5rem 0;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#result {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    border-top: 1px solid #ffffff34;
+}
+
+#final {
+    color: white;
+    font-size: 1.2rem;
+    display: block;
+    margin-top: 1rem;
+}
+
+.input-field select option {
+    background-color: #262626;
+    color: #f8fafc;
+}
+
+.input-field select {
+    appearance: none;
+    cursor: pointer;
+}
+
+#infos {
+    margin-top: 1.5rem;
+}
+
+#result {
+    padding-top: 1.5rem;
+}
+
+#final {
+    line-height: 1.8rem;
+    word-break: break-word;
+    max-width: 100%;
+}
+
+#container {
+    flex-wrap: wrap;
+}
+
+#btnPlanilha{
+    color: white;
+}
+
+#btnLimpar {
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    background-color: #3f3f46;
+    color: white;
+    padding: 0.5rem 0;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+
+@media screen and (max-width: 1024px){
+
+
+    #calculator{
+        width: 100%;
+        max-width: 500px;
+    }
+}
+
+@media screen and (max-width: 1024px){
+
+    #container{
+        flex-direction: column;
+    }
+
+    #img img{
+        width: 18rem;
+    }
+
+    #calculator{
+        width: 100%;
+        max-width: 500px;
+    }
+}
