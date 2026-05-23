@@ -18,17 +18,17 @@
                 <div style="margin-top: 1.5rem;">
                     {% if calculos %}
                         {% for c in calculos %}
-                        <div style="background:#3f3f46; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-                            <p style="color:#ab7aff; font-weight:600; text-transform:capitalize;">{{ c[2] }}</p>
-                            <p>Valor do bem: R$ {{ "%.2f"|format(c[3]) }}</p>
-                            <p>Taxa de juros: {{ c[4] }}%</p>
-                            <p>Parcelas: {{ c[5] }}x de R$ {{ "%.2f"|format(c[7]) }}</p>
-                            <p>Valor final: R$ {{ "%.2f"|format(c[8]) }}</p>
-                            <p>Total de juros: R$ {{ "%.2f"|format(c[9]) }}</p>
-                            <p>Aumento: {{ c[10] }}%</p>
-                            <p>Avaliação: {{ c[11] }}</p>
-                            <p style="color:#94a3b8; font-size:0.85rem;">{{ c[12] }}</p>
-                        </div>
+                            <div style="background:#3f3f46; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                                <p style="color:#ab7aff; font-weight:600; text-transform:capitalize;">{{ c['tipo_bem'] }}</p>
+                                <p>Valor do bem: R$ {{ "%.2f"|format(c['valor_bem']) }}</p>
+                                <p>Taxa de juros: {{ c['taxa_juros'] }}%</p>
+                                <p>Parcelas: {{ c['parcelas'] }}x de R$ {{ "%.2f"|format(c['parcela_mensal']) }}</p>
+                                <p>Valor final: R$ {{ "%.2f"|format(c['valor_final']) }}</p>
+                                <p>Total de juros: R$ {{ "%.2f"|format(c['total_juros']) }}</p>
+                                <p>Aumento: {{ c['aumento'] }}%</p>
+                                <p>Avaliação: {{ c['vale_a_pena'] }}</p>
+                                <p style="color:#94a3b8; font-size:0.85rem;">{{ c['criado_em'] }}</p>
+                            </div>
                         {% endfor %}
                     {% else %}
                         <p style="color:#94a3b8;">Nenhum cálculo encontrado.</p>
