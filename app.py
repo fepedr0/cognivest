@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, render_template, redirect, session, send_file
-from flask_mysqldb import MySQL
+from flask_mysql_connector import MySQL
 from flask_bcrypt import Bcrypt
 from openpyxl.styles import Font, PatternFill, Alignment
 import openpyxl
