@@ -1,5 +1,5 @@
 flask
-flask-mysql-connector
+pymysql
 flask-bcrypt
 openpyxl
 gunicorn

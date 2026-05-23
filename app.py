@@ -1,22 +1,25 @@
 from flask import Flask, request, jsonify, render_template, redirect, session, send_file
-from flask_mysql_connector import MySQL
 from flask_bcrypt import Bcrypt
 from openpyxl.styles import Font, PatternFill, Alignment
 import openpyxl
+import pymysql
 import io
 import os
 
 app = Flask(__name__, static_folder="assets")
 app.secret_key = os.environ.get('SECRET_KEY', 'cognivest_secret_123')
 
-app.config['MYSQL_HOST'] = os.environ.get('MYSQL_HOST', 'localhost')
-app.config['MYSQL_USER'] = os.environ.get('MYSQL_USER', 'root')
-app.config['MYSQL_PASSWORD'] = os.environ.get('MYSQL_PASSWORD', 'felipe2008hg')
-app.config['MYSQL_DB'] = os.environ.get('MYSQL_DB', 'cognivest')
-app.config['MYSQL_PORT'] = int(os.environ.get('MYSQL_PORT', 3306))
-
-mysql = MySQL(app)
 bcrypt = Bcrypt(app)
+
+def get_db():
+    return pymysql.connect(
+        host=os.environ.get('MYSQL_HOST', 'localhost'),
+        user=os.environ.get('MYSQL_USER', 'root'),
+        password=os.environ.get('MYSQL_PASSWORD', 'felipe2008hg'),
+        database=os.environ.get('MYSQL_DB', 'cognivest'),
+        port=int(os.environ.get('MYSQL_PORT', 3306)),
+        cursorclass=pymysql.cursors.DictCursor
+    )
 
 @app.route('/')
 def home():
@@ -31,14 +34,16 @@ def login():
     email = dados.get('email')
     senha = dados.get('senha')
 
-    cur = mysql.connection.cursor()
+    db = get_db()
+    cur = db.cursor()
     cur.execute("SELECT id, nome, senha_hash FROM usuarios WHERE email = %s", (email,))
     usuario = cur.fetchone()
     cur.close()
+    db.close()
 
-    if usuario and bcrypt.check_password_hash(usuario[2], senha):
-        session['usuario_id'] = usuario[0]
-        session['usuario_nome'] = usuario[1]
+    if usuario and bcrypt.check_password_hash(usuario['senha_hash'], senha):
+        session['usuario_id'] = usuario['id']
+        session['usuario_nome'] = usuario['nome']
         return jsonify({ 'sucesso': True })
     
     return jsonify({ 'sucesso': False, 'erro': 'Email ou senha incorretos' })
@@ -56,11 +61,13 @@ def cadastro():
     senha_hash = bcrypt.generate_password_hash(senha).decode('utf-8')
 
     try:
-        cur = mysql.connection.cursor()
+        db = get_db()
+        cur = db.cursor()
         cur.execute("INSERT INTO usuarios (nome, email, senha_hash) VALUES (%s, %s, %s)", 
                     (nome, email, senha_hash))
-        mysql.connection.commit()
+        db.commit()
         cur.close()
+        db.close()
         return jsonify({ 'sucesso': True })
     except Exception as e:
         print('ERRO NO CADASTRO:', e)
@@ -85,7 +92,8 @@ def salvar_calculo():
     dados = request.get_json()
 
     try:
-        cur = mysql.connection.cursor()
+        db = get_db()
+        cur = db.cursor()
         cur.execute("""
             INSERT INTO calculos 
             (usuario_id, tipo_bem, valor_bem, taxa_juros, parcelas, entrada, parcela_mensal, valor_final, total_juros, aumento, vale_a_pena)
@@ -103,8 +111,9 @@ def salvar_calculo():
             dados['aumento'],
             dados['vale_a_pena']
         ))
-        mysql.connection.commit()
+        db.commit()
         cur.close()
+        db.close()
         return jsonify({ 'sucesso': True })
     except Exception as e:
         print('ERRO AO SALVAR:', e)
@@ -115,10 +124,12 @@ def historico():
     if 'usuario_id' not in session:
         return redirect('/login')
     
-    cur = mysql.connection.cursor()
+    db = get_db()
+    cur = db.cursor()
     cur.execute("SELECT * FROM calculos WHERE usuario_id = %s ORDER BY criado_em DESC", (session['usuario_id'],))
     calculos = cur.fetchall()
     cur.close()
+    db.close()
 
     return render_template('historico.html', calculos=calculos)
 
@@ -184,10 +195,12 @@ def limpar_historico():
     if 'usuario_id' not in session:
         return jsonify({ 'sucesso': False })
     
-    cur = mysql.connection.cursor()
+    db = get_db()
+    cur = db.cursor()
     cur.execute("DELETE FROM calculos WHERE usuario_id = %s", (session['usuario_id'],))
-    mysql.connection.commit()
+    db.commit()
     cur.close()
+    db.close()
     
     return jsonify({ 'sucesso': True })
 
