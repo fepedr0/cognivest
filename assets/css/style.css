@@ -19,11 +19,16 @@ body{
 
 #container {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     gap: 3.5rem;
     flex-wrap: wrap;
 }
+
+#img {
+    padding-top: 17rem;
+}
+
 
 #img img {
     width: 32rem;
